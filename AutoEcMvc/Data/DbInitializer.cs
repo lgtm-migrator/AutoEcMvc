@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using AutoEcMvc.Enums;
 using AutoEcMvc.Models;
 
 namespace AutoEcMvc.Data

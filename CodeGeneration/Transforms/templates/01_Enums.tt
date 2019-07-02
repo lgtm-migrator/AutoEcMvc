@@ -1,0 +1,20 @@
+﻿<#@ include file="imports.ttinclude" #><#
+    var rootPath = Path.GetDirectoryName(Host.TemplateFile) + "\\..\\";
+    SortedDictionary<string, SortedDictionary<string, string>> allEnums = BuildMethods.GetEnumFilesAsDictionaries(rootPath + "enums");
+    foreach(var enumKvp in allEnums) 
+    {
+        var enm = enumKvp.Value;
+        var className = enumKvp.Key;
+        
+#><#@ include file="warning.ttinclude" #>
+
+namespace AutoEcMvc.Enums
+{
+    public enum <#= className #>
+    {
+<# foreach(var valueKvp in enm) { #> 
+        <#=valueKvp.Key#> = <#=valueKvp.Value#>, <# } #>
+    }
+}
+<# SaveOutput(className + ".cs", "..//..//..//AutoEcMvc//Enums");
+} //foreach(var enumKvp in allEnums) #> <#@ include file="saveoutput.ttinclude" #>

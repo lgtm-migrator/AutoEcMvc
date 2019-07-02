@@ -4,23 +4,16 @@
 //    All other changes to this file will cause incorrect behavior and will be lost when the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-using AutoEcMvc.Enums;
-
-namespace AutoEcMvc.Models
+namespace AutoEcMvc.Enums
 {
-    public partial class CourseAssignment
+    public enum Grade
     {
-
-        public int InstructorID { get; set; }
-        public Instructor Instructor { get; set; }
-
-        public int CourseID { get; set; }
-        public Course Course { get; set; }
-
+ 
+        A = 0,  
+        B = 1,  
+        C = 2,  
+        D = 3,  
+        E = 4, 
     }
 }

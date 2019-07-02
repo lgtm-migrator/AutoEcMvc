@@ -22,6 +22,8 @@ namespace CodeGeneration
             return pad;
         }
 
+        #region File Methods
+
         private static List<Table> _tables;
 
         public static List<Table> GetJsonFilesAsTables(string path)
@@ -64,6 +66,52 @@ namespace CodeGeneration
             return _tables;
         }
 
+        private static SortedDictionary<string, SortedDictionary<string, string>> _enums;
+
+        public static SortedDictionary<string, SortedDictionary<string, string>> GetEnumFilesAsDictionaries(string path)
+        {
+            if (true == _enums?.Any()) return _enums;
+
+            _enums = new SortedDictionary<string, SortedDictionary<string, string>>();
+            var settings = new JsonSerializerSettings()
+            {
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                NullValueHandling = NullValueHandling.Include
+            };
+            try
+            {
+                var dir = new DirectoryInfo(path);
+
+                foreach (var f in dir.GetFiles("*.json"))
+                {
+                    try
+                    {
+                        Trace.WriteLine("Starting parse of " + f.Name);
+                        using (var reader = new StreamReader(f.FullName, true))
+                        {
+                            _enums[f.Name.Replace(".json", "")] =
+                                JsonConvert.DeserializeObject<SortedDictionary<string, string>>(reader.ReadToEnd(),
+                                    settings);
+                            reader.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine(ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+
+            return _enums;
+        }
+
+        #endregion File Methods
+
         public static string GetModelProperty(Column column)
         {
             var ret = new List<string>();
@@ -92,6 +140,12 @@ namespace CodeGeneration
                     if (!string.IsNullOrEmpty(column.DataType)) decimalAttributes.Add($"[DataType(DataType.{column.DataType})]");
                     if (!string.IsNullOrEmpty(column.ColumnTypeName)) decimalAttributes.Add($"[Column(TypeName = \"{column.ColumnTypeName}\")]");
                     if (decimalAttributes.Any()) attributes = string.Join(Environment.NewLine + GetTabs(2), decimalAttributes);
+                    break;
+                case "enum":
+                    type = column.Enum;
+                    break;
+                case "enum?":
+                    type = $"{column.Enum}?";
                     break;
                 case "int":
                     if (!string.IsNullOrEmpty(column.Range)) attributes = $"[Range({column.Range})]";

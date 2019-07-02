@@ -18,14 +18,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Transforms\templates\01_Models.ignore">
+    <None Update="Transforms\templates\01_Enums.ignore">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>01_Models.tt</DependentUpon>
+      <DependentUpon>01_Enums.tt</DependentUpon>
+    </None>
+    <None Update="Transforms\templates\01_Enums.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>01_Enums.ignore</LastGenOutput>
+    </None>
+    <None Update="Transforms\templates\01_Models copy.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>01_Models copy.ignore</LastGenOutput>
     </None>
     <None Update="Transforms\templates\01_Models.tt">
       <LastGenOutput>01_Models.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Transforms\templates\02_Models.ignore">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>02_Models.tt</DependentUpon>
+    </None>
+    <None Update="Transforms\templates\02_Models.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>02_Models.ignore</LastGenOutput>
     </None>
   </ItemGroup>
 
