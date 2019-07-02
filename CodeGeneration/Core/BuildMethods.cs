@@ -145,6 +145,10 @@ namespace CodeGeneration
                     type = column.Enum;
                     break;
                 case "enum?":
+                    if (!string.IsNullOrEmpty(column.NullDisplayText))
+                    {
+                        attributes = $"[DisplayFormat(NullDisplayText = \"{column.NullDisplayText}\")]";
+                    }
                     type = $"{column.Enum}?";
                     break;
                 case "int":

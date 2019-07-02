@@ -36,6 +36,7 @@
         public int? Length { get; set; }
         public int? MinimumLength { get; set; }
         public string Name { get; set; }
+        public string NullDisplayText { get; set; }
 
         public int Order { get; set; }
 
