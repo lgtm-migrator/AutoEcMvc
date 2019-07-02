@@ -1,0 +1,28 @@
+{
+  "Base": "Person",
+  "Description": "An student for a course",
+  "Name": "Student",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "DatabaseGeneratedOption": "",
+  "PrimaryKeyDisplayName": "",
+  "JunctionTable": false,
+  "Columns": [
+    {
+      "ApplyFormatInEditMode": true,
+      "DataType": "Date",
+      "DataFormatString": "{0:yyyy-MM-dd}",
+      "Description": "Date the student enrolled",
+      "DisplayName": "Enrollment Date",
+      "Name": "EnrollmentDate",
+      "Order": 0,
+      "Type": "DateTime"
+    },
+    {
+      "Description": "Enrollments",
+      "Name": "Enrollments",
+      "Order": 10,
+      "Target": "Enrollment",
+      "Type": "relationships"
+    }
+  ]
+}
