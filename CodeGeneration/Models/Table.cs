@@ -13,11 +13,14 @@ namespace CodeGeneration
 
         public int CacheDuration { get; set; }
 
+        public bool? IsBase { get; set; }
+
         public string Name { get; set; }
 
         public string DatabaseGeneratedOption { get; set; }
 
         public string PrimaryKeyDisplayName { get; set; }
+        public string PrimaryKeyName { get; set; }
 
         public bool? JunctionTable { get; set; }
 

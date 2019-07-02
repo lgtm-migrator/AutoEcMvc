@@ -2,7 +2,9 @@
     var tables = BuildMethods.GetJsonFilesAsTables(Path.GetDirectoryName(Host.TemplateFile) + "\\..\\schema");
     foreach(var table in tables) {
         var isDerivedClass = !string.IsNullOrWhiteSpace(table.Base);
-        var hasPrimaryKey = !isDerivedClass && true != table.JunctionTable;#><#@ include file="warning.ttinclude" #>
+        var classContext = (true == table.IsBase) ? "abstract " : "";
+        var hasPrimaryKey = !isDerivedClass && true != table.JunctionTable;
+        var primaryKeyName = (!string.IsNullOrEmpty(table.PrimaryKeyName)) ? table.PrimaryKeyName : $"{table.Name}ID";#><#@ include file="warning.ttinclude" #>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,14 +14,14 @@ using AutoEcMvc.Enums;
 
 namespace AutoEcMvc.Models
 {
-    public partial class <#= table.Name #><#= (isDerivedClass) ? $": {table.Base}" : ""#>
+    public <#=classContext#>partial class <#= table.Name #><#= (isDerivedClass) ? $": {table.Base}" : ""#>
     {
 <# if(hasPrimaryKey && !string.IsNullOrEmpty(table.DatabaseGeneratedOption)) { #>
         [DatabaseGenerated(DatabaseGeneratedOption.<#= table.DatabaseGeneratedOption #>)]
 <# } if(hasPrimaryKey && !string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) { #>
         [Display(Name = "<#= table.PrimaryKeyDisplayName #>")]
 <# } if(hasPrimaryKey) { #>
-        public int <#=table.Name#>ID { get; set; }
+        public int <#=primaryKeyName#> { get; set; }
 <# } foreach(var column in table.Columns) { #>
 <#=BuildMethods.GetModelProperty(column)#>
 <# } #>

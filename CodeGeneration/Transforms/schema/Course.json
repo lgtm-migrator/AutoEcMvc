@@ -8,9 +8,6 @@
   "Columns": [
     {
       "Description": "Unique name of the course",
-      "IsIndexed": true,
-      "IsInsertOnly": true,
-      "IsRequired": true,
       "Length": 50,
       "MinimumLength": 3,
       "Name": "Title",
@@ -19,7 +16,6 @@
     },
     {
       "Description": "Number of credit hours this course is worth",
-      "IsRequired": true,
       "Name": "Credits",
       "Order": 10,
       "Range": "0, 5",
@@ -27,7 +23,6 @@
     },
     {
       "Description": "Department to which this course belongs",
-      "IsRequired": true,
       "Name": "Department",
       "Order": 20,
       "Target": "Department",

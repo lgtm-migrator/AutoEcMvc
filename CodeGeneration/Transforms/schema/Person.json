@@ -1,0 +1,29 @@
+{
+  "Description": "An person",
+  "IsBase": true,
+  "Name": "Person",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "PrimaryKeyName": "ID",
+  "Columns": [
+    {
+      "Description": "Person's last name",
+      "DisplayName": "Last Name",
+      "IsRequired": true,
+      "Length": 50,
+      "Name": "LastName",
+      "Order": 0,
+      "Type": "string"
+    },
+    {
+      "ColumnName": "FirstName",
+      "Description": "Person's first name",
+      "DisplayName": "First Name",
+      "ErrorMessage": "First name cannot be longer than 50 characters.",
+      "IsRequired": true,
+      "Length": 50,
+      "Name": "FirstMidName",
+      "Order": 0,
+      "Type": "string"
+    }
+  ]
+}

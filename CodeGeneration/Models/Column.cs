@@ -3,6 +3,7 @@
     public class Column
     {
         public bool? ApplyFormatInEditMode { get; set; }
+        public string ColumnName { get; set; }
         public string ColumnTypeName { get; set; }
         public string DataFormatString { get; set; }
         public string DataType { get; set; }
@@ -13,7 +14,7 @@
         public string DisplayName { get; set; }
 
         public string Enum { get; set; }
-
+        public string ErrorMessage { get; set; }
         public bool? IsAudited { get; set; }
 
         public bool? IsCompressed { get; set; }

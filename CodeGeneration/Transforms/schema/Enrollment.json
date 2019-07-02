@@ -16,7 +16,6 @@
     },
     {
       "Description": "Course this student is taking",
-      "IsRequired": true,
       "Name": "Course",
       "Order": 10,
       "Target": "Course",
@@ -24,7 +23,6 @@
     },
     {
       "Description": "Student taking this course",
-      "IsRequired": true,
       "Name": "Student",
       "Order": 20,
       "Target": "Student",

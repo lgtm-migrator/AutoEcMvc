@@ -8,9 +8,6 @@
   "Columns": [
     {
       "Description": "Unique name of the department",
-      "IsIndexed": true,
-      "IsInsertOnly": true,
-      "IsRequired": true,
       "Length": 50,
       "MinimumLength": 3,
       "Name": "Name",
@@ -21,7 +18,6 @@
       "ColumnTypeName": "money",
       "DataType": "Currency",
       "Description": "Budget for the department",
-      "IsRequired": true,
       "Name": "Budget",
       "Order": 10,
       "Type": "decimal"
@@ -32,7 +28,6 @@
       "DataFormatString": "{0:yyyy-MM-dd}",
       "Description": "Date for start",
       "DisplayName": "Start Date",
-      "IsRequired": true,
       "Name": "StartDate",
       "Order": 20,
       "Type": "DateTime"
@@ -46,12 +41,11 @@
     },
     {
       "Description": "Department Admin",
-      "IsRequired": false,
       "Name": "Administrator",
       "Order": 40,
       "Target": "Instructor",
       "TargetIdName": "InstructorID",
-      "Type": "relationship"
+      "Type": "relationship?"
     },
     {
       "Description": "Courses associated with this department",

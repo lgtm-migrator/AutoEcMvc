@@ -8,7 +8,6 @@
   "Columns": [
     {
       "Description": "Instructor to associate with a course",
-      "IsRequired": true,
       "Name": "Instructor",
       "Order": 0,
       "Target": "Instructor",
@@ -16,7 +15,6 @@
     },
     {
       "Description": "Course to associate with an instructor",
-      "IsRequired": true,
       "Name": "Course",
       "Order": 0,
       "Target": "Course",

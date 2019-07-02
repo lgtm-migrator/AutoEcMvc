@@ -138,7 +138,6 @@ namespace CodeGeneration
                 case "decimal":
                     var decimalAttributes = new List<string>();
                     if (!string.IsNullOrEmpty(column.DataType)) decimalAttributes.Add($"[DataType(DataType.{column.DataType})]");
-                    if (!string.IsNullOrEmpty(column.ColumnTypeName)) decimalAttributes.Add($"[Column(TypeName = \"{column.ColumnTypeName}\")]");
                     if (decimalAttributes.Any()) attributes = string.Join(Environment.NewLine + GetTabs(2), decimalAttributes);
                     break;
                 case "enum":
@@ -157,9 +156,11 @@ namespace CodeGeneration
                 case "string":
                     if (column.Length > 0) attributes = $"[StringLength({column.Length}";
                     if (column.MinimumLength > 0) attributes += $", MinimumLength = {column.MinimumLength}";
+                    if (!string.IsNullOrEmpty(column.ErrorMessage)) attributes += $", ErrorMessage = \"{column.ErrorMessage}\"";
                     if (attributes.Length > 0) attributes += ")]";
                     break;
                 case "relationship":
+                case "relationship?":
                     var idColumnName = $"{column.Name}ID";
                     if (!string.IsNullOrEmpty(column.TargetIdName))
                     {
@@ -167,7 +168,7 @@ namespace CodeGeneration
                     }
 
                     var nullable = "";
-                    if (false == column.IsRequired)
+                    if (column.Type == "relationship?")
                     {
                         nullable = "?";
                     }
@@ -179,16 +180,36 @@ namespace CodeGeneration
                     attributes += $"public int{nullable} {idColumnName} {{ get; set; }}";
                     type = column.Target;
                     break;
+
                 case "relationships":
                     type = $"ICollection<{column.Target}>";
                     break;
             }
 
+            if (!string.IsNullOrEmpty(column.ColumnTypeName) || !string.IsNullOrEmpty(column.ColumnName))
+            {
+                var col = "[Column(";
+                if (!string.IsNullOrEmpty(column.ColumnName))
+                {
+                    col += $"\"{column.ColumnName}\"";
+                    if (!string.IsNullOrEmpty(column.ColumnTypeName)) col += ", ";
+                }
+                if (!string.IsNullOrEmpty(column.ColumnTypeName))
+                {
+                    col += $"TypeName = \"{column.ColumnTypeName}\"";
+                }
+                col += ")]";
+                attributes += $"{Environment.NewLine}{GetTabs(2)}{col}";
+            }
+
+            if (true == column.IsRequired)
+            {
+                ret.Add(GetTabs(2) + "[Required]");
+            }
             if (!string.IsNullOrEmpty(attributes))
             {
                 ret.Add(GetTabs(2) + attributes);
             }
-
             if (!string.IsNullOrEmpty(column.DisplayName))
             {
                 ret.Add(GetTabs(2) + $"[Display(Name = \"{column.DisplayName}\")]");
