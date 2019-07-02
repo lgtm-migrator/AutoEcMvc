@@ -1,0 +1,47 @@
+﻿<#@ include file="imports.ttinclude" #><#
+    var tables = BuildMethods.GetJsonFilesAsTables(Path.GetDirectoryName(Host.TemplateFile) + "\\..\\schema");
+    foreach(var table in tables) {
+        var isDerivedClass = !string.IsNullOrWhiteSpace(table.Base);#><#@ include file="warning.ttinclude" #>
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AutoEcMvc.Models
+{
+    public partial class <#= table.Name #>
+    {
+<# if(!string.IsNullOrEmpty(table.DatabaseGeneratedOption)) #>
+        [DatabaseGenerated(DatabaseGeneratedOption.<#= table.DatabaseGeneratedOption #>)]
+<# if(!string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) #>
+        [Display(Name = "<#= table.PrimaryKeyDisplayName #>")]
+        public int <#=table.Name#>ID { get; set; }
+
+<# foreach(var column in table.Columns) {
+    var attributes = string.Empty;
+    var type = column.Type;
+    switch(column.Type) {
+        case "string":
+            if(column.Length > 0) attributes = $"[StringLength({column.Length}";
+            if(column.MinimumLength > 0) attributes += $", MinimumLength = {column.MinimumLength}";
+            if(attributes.Length > 0) attributes += ")]";
+            break;
+        case "int":
+            if(!string.IsNullOrEmpty(column.Range)) attributes = $"[Range({column.Range})]";
+            break;
+        case "relationship":
+            attributes = $"public int {column.Name}ID {{ get; set; }}";
+            type = column.Target;
+            break;
+        case "relationships":
+            type = $"ICollection<{column.Target}>";
+            break;
+    } #>
+<# if(!string.IsNullOrEmpty(attributes)) #>        <#=attributes#>
+        public <#=type#> <#=column.Name#> { get; set; }
+<# } #>
+    }
+}
+<#
+    SaveOutput(table.Name + ".cs", "..//..//..//AutoEcMvc//Models");
+  } //foreach(var table in tables) 
+#><#@ include file="saveoutput.ttinclude" #>

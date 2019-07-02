@@ -1,0 +1,29 @@
+<#+ void SaveOutput(string outputFileName, string path)
+  {
+     SaveOutput(this.GenerationEnvironment.ToString(), outputFileName, path, true);
+  }
+
+  void SaveOutput(string json, string outputFileName, string path)
+  {
+     SaveOutput(json, outputFileName, path, true);
+  }
+
+  void SaveOutput(JObject root, string outputFileName, string path)
+  {
+     SaveOutput(root, outputFileName, path, true);
+  }
+
+  void SaveOutput(object root, string outputFileName, string path, bool createIfMissing)
+  {
+     // Write to destination folder
+     string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), path);
+     if(!Directory.Exists(templateDirectory)) {
+        Directory.CreateDirectory(templateDirectory);
+     }
+     string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+     
+     File.WriteAllText(outputFilePath, root.ToString()); 
+
+     // Flush generation
+     this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+  } #>
