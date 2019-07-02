@@ -1,0 +1,40 @@
+*.orig
+*.user
+*.suo
+*.sln.*
+bin
+obj
+*.vssettings
+Local.testsettings
+
+/tags
+*~
+\#*\#
+.\#*
+*_archive
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.aux
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+*.out
+*.log
+.vs/
+.vscode/
+
+# Settings/code-gen files
+*.ignore
