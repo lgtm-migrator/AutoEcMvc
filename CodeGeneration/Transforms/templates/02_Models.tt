@@ -1,7 +1,8 @@
 ﻿<#@ include file="imports.ttinclude" #><#
     var tables = BuildMethods.GetJsonFilesAsTables(Path.GetDirectoryName(Host.TemplateFile) + "\\..\\schema");
     foreach(var table in tables) {
-        var isDerivedClass = !string.IsNullOrWhiteSpace(table.Base);#><#@ include file="warning.ttinclude" #>
+        var isDerivedClass = !string.IsNullOrWhiteSpace(table.Base);
+        var hasPrimaryKey = !isDerivedClass && true != table.JunctionTable;#><#@ include file="warning.ttinclude" #>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,13 +12,13 @@ using AutoEcMvc.Enums;
 
 namespace AutoEcMvc.Models
 {
-    public partial class <#= table.Name #>
+    public partial class <#= table.Name #><#= (isDerivedClass) ? $": {table.Base}" : ""#>
     {
-<# if(true != table.JunctionTable && !string.IsNullOrEmpty(table.DatabaseGeneratedOption)) { #>
+<# if(hasPrimaryKey && !string.IsNullOrEmpty(table.DatabaseGeneratedOption)) { #>
         [DatabaseGenerated(DatabaseGeneratedOption.<#= table.DatabaseGeneratedOption #>)]
-<# } if(true != table.JunctionTable && !string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) { #>
+<# } if(hasPrimaryKey && !string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) { #>
         [Display(Name = "<#= table.PrimaryKeyDisplayName #>")]
-<# } if(true != table.JunctionTable) { #>
+<# } if(hasPrimaryKey) { #>
         public int <#=table.Name#>ID { get; set; }
 <# } foreach(var column in table.Columns) { #>
 <#=BuildMethods.GetModelProperty(column)#>

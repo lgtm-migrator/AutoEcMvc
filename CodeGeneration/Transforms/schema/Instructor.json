@@ -1,0 +1,34 @@
+{
+  "Base": "Person",
+  "Description": "An instructor for a course",
+  "Name": "Instructor",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "DatabaseGeneratedOption": "",
+  "PrimaryKeyDisplayName": "",
+  "JunctionTable": false,
+  "Columns": [
+    {
+      "ApplyFormatInEditMode": true,
+      "DataType": "Date",
+      "DataFormatString": "{0:yyyy-MM-dd}",
+      "Description": "Date for start",
+      "DisplayName": "Hire Date",
+      "Name": "HireDate",
+      "Order": 0,
+      "Type": "DateTime"
+    },
+    {
+      "Description": "Course Assignments",
+      "Name": "CourseAssignments",
+      "Order": 10,
+      "Target": "CourseAssignment",
+      "Type": "relationships"
+    },
+    {
+      "Description": "Course this student is taking",
+      "Name": "OfficeAssignment",
+      "Order": 20,
+      "Type": "OfficeAssignment"
+    }
+  ]
+}
