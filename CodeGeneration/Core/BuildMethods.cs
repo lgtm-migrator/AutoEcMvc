@@ -171,7 +171,12 @@ namespace CodeGeneration
                     {
                         nullable = "?";
                     }
-                    attributes = $"public int{nullable} {idColumnName} {{ get; set; }}";
+
+                    if (true == column.IsKey)
+                    {
+                        attributes = $"[Key]{Environment.NewLine}{GetTabs(2)}";
+                    }
+                    attributes += $"public int{nullable} {idColumnName} {{ get; set; }}";
                     type = column.Target;
                     break;
                 case "relationships":

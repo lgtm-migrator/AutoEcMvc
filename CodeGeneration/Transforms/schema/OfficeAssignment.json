@@ -1,0 +1,26 @@
+{
+  "Description": "An office on campuse",
+  "Name": "OfficeAssignment",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "DatabaseGeneratedOption": "",
+  "PrimaryKeyDisplayName": "",
+  "JunctionTable": true,
+  "Columns": [
+    {
+      "Description": "Name of the location",
+      "DisplayName": "Office Location",
+      "Length": 50,
+      "Name": "Location",
+      "Order": 0,
+      "Type": "string"
+    },
+    {
+      "Description": "Instructor",
+      "IsKey": true,
+      "Name": "Instructor",
+      "Order": 10,
+      "Target": "Instructor",
+      "Type": "relationship"
+    }
+  ]
+}

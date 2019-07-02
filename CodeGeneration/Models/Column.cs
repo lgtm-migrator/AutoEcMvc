@@ -24,6 +24,8 @@
 
         public bool? IsJSON { get; set; }
 
+        public bool? IsKey { get; set; }
+
         public bool? IsReadOnly { get; set; }
 
         public bool? IsRelationship { get; set; }
