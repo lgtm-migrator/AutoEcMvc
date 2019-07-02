@@ -2,6 +2,10 @@
 {
     public class Column
     {
+        public bool? ApplyFormatInEditMode { get; set; }
+        public string ColumnTypeName { get; set; }
+        public string DataFormatString { get; set; }
+        public string DataType { get; set; }
         public string DefaultValue { get; set; }
 
         public string Description { get; set; }
@@ -47,8 +51,9 @@
 
         public int? Scale { get; set; }
         public string Target { get; set; }
+        public string TargetIdName { get; set; }
         public string TargetAlias { get; set; }
-
+        public bool? Timestamp { get; set; }
         public string Type { get; set; }
     }
 }

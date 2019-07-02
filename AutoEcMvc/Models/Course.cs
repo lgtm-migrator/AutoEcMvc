@@ -4,6 +4,7 @@
 //    All other changes to this file will cause incorrect behavior and will be lost when the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,9 +29,7 @@ namespace AutoEcMvc.Models
         public int DepartmentID { get; set; }
         public Department Department { get; set; }
 
-
         public ICollection<Enrollment> Enrollments { get; set; }
-
 
         public ICollection<CourseAssignment> CourseAssignments { get; set; }
 

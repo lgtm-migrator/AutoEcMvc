@@ -1,0 +1,64 @@
+{
+  "Description": "A department at the university",
+  "Name": "Department",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "DatabaseGeneratedOption": "",
+  "PrimaryKeyDisplayName": "",
+  "JunctionTable": false,
+  "Columns": [
+    {
+      "Description": "Unique name of the department",
+      "IsIndexed": true,
+      "IsInsertOnly": true,
+      "IsRequired": true,
+      "Length": 50,
+      "MinimumLength": 3,
+      "Name": "Name",
+      "Order": 0,
+      "Type": "string"
+    },
+    {
+      "ColumnTypeName": "money",
+      "DataType": "Currency",
+      "Description": "Budget for the department",
+      "IsRequired": true,
+      "Name": "Budget",
+      "Order": 10,
+      "Type": "decimal"
+    },
+    {
+      "ApplyFormatInEditMode": true,
+      "DataType": "Date",
+      "DataFormatString": "{0:yyyy-MM-dd}",
+      "Description": "Date for start",
+      "DisplayName": "Start Date",
+      "IsRequired": true,
+      "Name": "StartDate",
+      "Order": 20,
+      "Type": "DateTime"
+    },
+    {
+      "Description": "Version number for this record",
+      "Name": "RowVersion",
+      "Order": 30,
+      "Timestamp": true,
+      "Type": "byte[]"
+    },
+    {
+      "Description": "Department Admin",
+      "IsRequired": false,
+      "Name": "Administrator",
+      "Order": 40,
+      "Target": "Instructor",
+      "TargetIdName": "InstructorID",
+      "Type": "relationship"
+    },
+    {
+      "Description": "Courses associated with this department",
+      "Name": "Courses",
+      "Order": 50,
+      "Target": "Course",
+      "Type": "relationships"
+    }
+  ]
+}
