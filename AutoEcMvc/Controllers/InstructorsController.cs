@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoEcMvc.Data;
+using AutoEcMvc.Models;
+using AutoEcMvc.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ContosoUniversity.Data;
-using ContosoUniversity.Models;
-using ContosoUniversity.Models.SchoolViewModels;
 
-namespace ContosoUniversity.Controllers
+namespace AutoEcMvc.Controllers
 {
     public class InstructorsController : Controller
     {

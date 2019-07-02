@@ -1,11 +1,10 @@
-﻿using ContosoUniversity.Models;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Linq;
+using AutoEcMvc.Models;
 
-namespace ContosoUniversity.Data
+namespace AutoEcMvc.Data
 {
     public static class DbInitializer
     {

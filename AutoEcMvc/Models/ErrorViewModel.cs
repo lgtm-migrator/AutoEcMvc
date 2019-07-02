@@ -1,6 +1,6 @@
 using System;
 
-namespace ContosoUniversity.Models
+namespace AutoEcMvc.Models
 {
     public class ErrorViewModel
     {

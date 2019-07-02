@@ -1,4 +1,4 @@
-﻿@model ContosoUniversity.Models.Instructor
+﻿@model AutoEcMvc.Models.Instructor
 
 @{
     ViewData["Title"] = "Edit";
@@ -39,7 +39,7 @@
                         <tr>
                             @{
                                 int cnt = 0;
-                                List<ContosoUniversity.Models.SchoolViewModels.AssignedCourseData> courses = ViewBag.Courses;
+                                List<AutoEcMvc.Models.SchoolViewModels.AssignedCourseData> courses = ViewBag.Courses;
 
                                 foreach (var course in courses)
                                 {

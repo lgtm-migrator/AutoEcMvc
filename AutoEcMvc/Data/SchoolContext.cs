@@ -1,7 +1,7 @@
-﻿using ContosoUniversity.Models;
+﻿using AutoEcMvc.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContosoUniversity.Data
+namespace AutoEcMvc.Data
 {
     public class SchoolContext : DbContext
     {
