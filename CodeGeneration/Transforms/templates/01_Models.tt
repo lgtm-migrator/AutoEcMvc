@@ -10,13 +10,13 @@ namespace AutoEcMvc.Models
 {
     public partial class <#= table.Name #>
     {
-<# if(!string.IsNullOrEmpty(table.DatabaseGeneratedOption)) #>
+<# if(true != table.JunctionTable && !string.IsNullOrEmpty(table.DatabaseGeneratedOption)) { #>
         [DatabaseGenerated(DatabaseGeneratedOption.<#= table.DatabaseGeneratedOption #>)]
-<# if(!string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) #>
+<# } if(true != table.JunctionTable && !string.IsNullOrEmpty(table.PrimaryKeyDisplayName)) { #>
         [Display(Name = "<#= table.PrimaryKeyDisplayName #>")]
+<# } if(true != table.JunctionTable) { #>
         public int <#=table.Name#>ID { get; set; }
-
-<# foreach(var column in table.Columns) {
+<# } foreach(var column in table.Columns) {
     var attributes = string.Empty;
     var type = column.Type;
     switch(column.Type) {

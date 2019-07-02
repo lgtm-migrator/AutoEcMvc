@@ -4,6 +4,7 @@
   "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
   "DatabaseGeneratedOption": "None",
   "PrimaryKeyDisplayName": "Number",
+  "JunctionTable": false,
   "Columns": [
     {
       "Description": "Unique name of the course",

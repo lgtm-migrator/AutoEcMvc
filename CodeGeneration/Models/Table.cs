@@ -19,6 +19,8 @@ namespace CodeGeneration
 
         public string PrimaryKeyDisplayName { get; set; }
 
+        public bool? JunctionTable { get; set; }
+
         public List<Column> Columns { get; set; }
 
         public List<Column> GetColumns() => Columns;

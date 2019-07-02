@@ -1,0 +1,26 @@
+{
+  "Description": "A the assignment of a course to an instructor",
+  "Name": "CourseAssignment",
+  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "JunctionTable": true,
+  "DatabaseGeneratedOption": "",
+  "PrimaryKeyDisplayName": "",
+  "Columns": [
+    {
+      "Description": "Instructor to associate with a course",
+      "IsRequired": true,
+      "Name": "Instructor",
+      "Order": 0,
+      "Target": "Instructor",
+      "Type": "relationship"
+    },
+    {
+      "Description": "Course to associate with an instructor",
+      "IsRequired": true,
+      "Name": "Course",
+      "Order": 0,
+      "Target": "Course",
+      "Type": "relationship"
+    }
+  ]
+}
