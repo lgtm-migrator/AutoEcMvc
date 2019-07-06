@@ -28,6 +28,6 @@ namespace AutoEcMvc.Models
     }
 }
 <#
-    SaveOutput(table.Name + ".cs", "..//..//..//AutoEcMvc//Models");
+    SaveOutput(table.Name + ".cs", "..//..//..//AutoEcMvc//Generated//Models");
   } //foreach(var table in tables) 
 #><#@ include file="saveoutput.ttinclude" #>

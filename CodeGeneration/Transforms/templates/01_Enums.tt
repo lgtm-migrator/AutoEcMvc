@@ -16,5 +16,5 @@ namespace AutoEcMvc.Enums
         <#=valueKvp.Key#> = <#=valueKvp.Value#>, <# } #>
     }
 }
-<# SaveOutput(className + ".cs", "..//..//..//AutoEcMvc//Enums");
+<# SaveOutput(className + ".cs", "..//..//..//AutoEcMvc//Generated//Enums");
 } //foreach(var enumKvp in allEnums) #> <#@ include file="saveoutput.ttinclude" #>
