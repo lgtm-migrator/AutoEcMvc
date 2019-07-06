@@ -12,9 +12,9 @@ namespace AutoEcMvc.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly MetadataContext _context;
 
-        public StudentsController(SchoolContext context)
+        public StudentsController(MetadataContext context)
         {
             _context = context;
         }

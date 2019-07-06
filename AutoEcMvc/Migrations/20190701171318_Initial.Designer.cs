@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AutoEcMvc.Migrations
 {
-    [DbContext(typeof(SchoolContext))]
+    [DbContext(typeof(MetadataContext))]
     [Migration("20190701171318_Initial")]
     partial class Initial
     {

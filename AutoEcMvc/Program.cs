@@ -23,7 +23,7 @@ namespace AutoEcMvc
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<SchoolContext>();
+                    var context = services.GetRequiredService<MetadataContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

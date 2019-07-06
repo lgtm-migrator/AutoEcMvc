@@ -38,3 +38,4 @@ Thumbs.db
 
 # Settings/code-gen files
 *.ignore
+AutoEcMvc/Properties/PublishProfiles/

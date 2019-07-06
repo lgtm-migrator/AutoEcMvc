@@ -14,9 +14,9 @@ namespace AutoEcMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly MetadataContext _context;
 
-        public HomeController(SchoolContext context)
+        public HomeController(MetadataContext context)
         {
             _context = context;
         }

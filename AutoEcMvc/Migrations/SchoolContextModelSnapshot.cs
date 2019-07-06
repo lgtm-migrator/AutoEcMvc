@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AutoEcMvc.Migrations
 {
-    [DbContext(typeof(SchoolContext))]
+    [DbContext(typeof(MetadataContext))]
     partial class SchoolContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
