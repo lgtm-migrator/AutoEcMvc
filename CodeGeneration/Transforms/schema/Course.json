@@ -1,5 +1,8 @@
 {
   "Description": "A course represents a college course that a student can take",
+  "DisplayName": "Title",
+  "HasControllers": true,
+  "ControllerMethods": [ "Index", "Details", "Create", "Edit", "Delete" ],
   "Name": "Course",
   "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
   "DatabaseGeneratedOption": "None",

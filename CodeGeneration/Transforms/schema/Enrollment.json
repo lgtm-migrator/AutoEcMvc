@@ -1,7 +1,6 @@
 {
   "Description": "A student enrollment in a course",
   "Name": "Enrollment",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
   "JunctionTable": false,

@@ -1,4 +1,5 @@
-﻿using AutoEcMvc.Data;
+﻿using System.Threading.Tasks;
+using AutoEcMvc.Data;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,5 +12,7 @@ namespace AutoEcMvc.Controllers
         protected ControllerBase(MetadataContext context) => _context = context;
 
         protected virtual void _AfterUpdate(object objToUpdate = null) { }
+
+        protected virtual async Task<bool> _OnIndex(params object[] data) => true;
     }
 }

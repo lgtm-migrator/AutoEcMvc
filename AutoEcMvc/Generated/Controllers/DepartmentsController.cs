@@ -19,16 +19,16 @@ namespace AutoEcMvc.Controllers
     public partial class DepartmentsController : ControllerBase
     {
         public DepartmentsController(MetadataContext context) : base(context) { }
-
         // GET: Departments
         public async Task<IActionResult> Index()
         {
             var context = _context.Departments
-                .Include( c => c.Administrator )
+                .Include(c => c.Administrator)
+                .Include(c => c.Administrator).ThenInclude(c => c.CourseAssignments).ThenInclude(c => c.Course)
+                .Include(c => c.Administrator).ThenInclude(c => c.OfficeAssignment)
                 .AsNoTracking();
             return View(await context.ToListAsync());
         }
-
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -37,12 +37,12 @@ namespace AutoEcMvc.Controllers
                 return NotFound();
             }
 
-            string query = "SELECT * FROM Department WHERE DepartmentID = {0}";
             var ret = await _context.Departments
-                .FromSql(query, id)
                 .Include(c => c.Administrator)
+                .Include(c => c.Administrator).ThenInclude(c => c.CourseAssignments).ThenInclude(c => c.Course)
+                .Include(c => c.Administrator).ThenInclude(c => c.OfficeAssignment)
                 .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m => m.DepartmentID == id);
 
             if (ret == null)
             {
@@ -51,7 +51,6 @@ namespace AutoEcMvc.Controllers
 
             return View(ret);
         }
-
         // GET: Departments/Create
         public IActionResult Create()
         {
@@ -77,7 +76,6 @@ namespace AutoEcMvc.Controllers
             _AfterUpdate(obj);
             return View(obj);
         }
-
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -88,6 +86,8 @@ namespace AutoEcMvc.Controllers
 
             var obj = await _context.Departments
                 .Include(c => c.Administrator)
+                .Include(c => c.Administrator).ThenInclude(c => c.CourseAssignments).ThenInclude(c => c.Course)
+                .Include(c => c.Administrator).ThenInclude(c => c.OfficeAssignment)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
 
@@ -114,6 +114,8 @@ namespace AutoEcMvc.Controllers
 
             var obj = await _context.Departments
                 .Include(c => c.Administrator)
+                .Include(c => c.Administrator).ThenInclude(c => c.CourseAssignments).ThenInclude(c => c.Course)
+                .Include(c => c.Administrator).ThenInclude(c => c.OfficeAssignment)
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
 
             if (obj == null)
@@ -192,6 +194,8 @@ namespace AutoEcMvc.Controllers
 
             var obj = await _context.Departments
                 .Include(c => c.Administrator)
+                .Include(c => c.Administrator).ThenInclude(c => c.CourseAssignments).ThenInclude(c => c.Course)
+                .Include(c => c.Administrator).ThenInclude(c => c.OfficeAssignment)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
             if (obj == null)
@@ -235,7 +239,6 @@ namespace AutoEcMvc.Controllers
                 return RedirectToAction(nameof(Delete), new { concurrencyError = true, id = obj.DepartmentID });
             }
         }
-
         private bool DepartmentExists(int id)
         {
             return _context.Departments.Any(e => e.DepartmentID == id);

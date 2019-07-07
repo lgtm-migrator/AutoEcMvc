@@ -1,7 +1,6 @@
 {
   "Description": "An office on campuse",
   "Name": "OfficeAssignment",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
   "JunctionTable": true,

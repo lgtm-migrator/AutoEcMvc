@@ -2,7 +2,8 @@
   "Base": "Person",
   "Description": "An instructor for a course",
   "Name": "Instructor",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "HasControllers": true,
+  "ControllerMethods": [ "Details", "Create", "Delete" ],
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
   "JunctionTable": false,
@@ -19,6 +20,7 @@
     },
     {
       "Description": "Course Assignments",
+      "MaterializeByDefault": true,
       "Name": "CourseAssignments",
       "Order": 10,
       "Target": "CourseAssignment",
@@ -26,6 +28,7 @@
     },
     {
       "Description": "Course this student is taking",
+      "MaterializeByDefault": true,
       "Name": "OfficeAssignment",
       "Order": 20,
       "Type": "OfficeAssignment"

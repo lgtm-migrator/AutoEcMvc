@@ -160,18 +160,76 @@ namespace CodeGeneration
 
         #region Controller Methods
 
-        public static string GetBindingColumns(Table thisTable, List<Table> allTables)
+        public static string GetIncludeColumns(Table thisTable, List<Table> allTables)
         {
-            var ret = new List<string> { GetPrimaryKeyName(thisTable, allTables) };
-            foreach (var col in thisTable.Columns.Where(c => c.Type != "relationships"))
+            var ret = new List<string> { };
+            foreach (var col in thisTable.Columns.Where(c => c.MaterializeByDefault))
             {
-                ret.Add(GetColumnName(col));
-                if (col.Type.StartsWith("relationship") && string.IsNullOrEmpty(col.TargetIdName))
+                ret.Add($"{GetTabs(4)}.Include(c => c.{col.Name})");
+                if (col.Type.StartsWith("relationship"))
                 {
-                    ret.Add($"{col.Target}ID");
+                    var targetTable = allTables?.FirstOrDefault(t => t.Name == col.Target);
+                    if (true != targetTable?.Columns?.Where(c => c.MaterializeByDefault)?.Any()) continue;
+
+                    foreach (var subCol in targetTable?.Columns?.Where(c => c.MaterializeByDefault))
+                    {
+                        if (subCol.Type.StartsWith("relationship"))
+                        {
+                            var subTargetTable = allTables?.FirstOrDefault(t => t.Name == subCol.Target);
+                            if (true != subTargetTable?.Columns?.Where(c => c.MaterializeByDefault)?.Any()) continue;
+
+                            foreach (var subSubCol in subTargetTable.Columns.Where(c => c.MaterializeByDefault))
+                            {
+                                ret.Add($"{GetTabs(4)}.Include(c => c.{col.Name}).ThenInclude(c => c.{subCol.Name}).ThenInclude(c => c.{subSubCol.Name})");
+                            }
+                        }
+                        else
+                        {
+                            ret.Add($"{GetTabs(4)}.Include(c => c.{col.Name}).ThenInclude(c => c.{subCol.Name})");
+                        }
+                    }
                 }
             }
-            return string.Join(",", ret);
+
+            if (!string.IsNullOrEmpty(thisTable.OrderBy))
+            {
+                ret.Add($"{GetTabs(4)}.OrderBy(c => c.{thisTable.OrderBy})");
+            }
+            else if (!string.IsNullOrEmpty(thisTable.Base))
+            {
+                var baseTable = allTables?.FirstOrDefault(t => t.Name == thisTable.Base);
+                if (!string.IsNullOrEmpty(baseTable?.OrderBy))
+                {
+                    ret.Add($"{GetTabs(4)}.OrderBy(c => c.{baseTable.OrderBy})");
+                }
+            }
+            return string.Join(Environment.NewLine, ret);
+        }
+
+        public static string GetBindingColumns(Table thisTable, List<Table> allTables)
+        {
+            if (null == thisTable) return string.Empty;
+
+            var values = new List<string> { GetPrimaryKeyName(thisTable, allTables) };
+            foreach (var col in thisTable.Columns.Where(c => c.Type != "relationships"))
+            {
+                values.Add(GetColumnName(col));
+                if (col.Type.StartsWith("relationship") && string.IsNullOrEmpty(col.TargetIdName))
+                {
+                    values.Add($"{col.Target}ID");
+                }
+            }
+            var ret = string.Join(",", values.Distinct());
+            if (!string.IsNullOrEmpty(thisTable.Base))
+            {
+                var baseTable = allTables?.FirstOrDefault(t => t.Name == thisTable.Base);
+                var baseProps = GetBindingColumns(baseTable, null);
+                if (!string.IsNullOrEmpty(baseProps))
+                {
+                    ret += $",{baseProps}";
+                }
+            }
+            return ret;
         }
 
         public static string GetAssignColumns(Table thisTable, List<Table> allTables)

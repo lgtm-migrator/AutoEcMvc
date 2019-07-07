@@ -2,7 +2,7 @@
   "Base": "Person",
   "Description": "An student for a course",
   "Name": "Student",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "ControllerMethods": [ "Index", "Details", "Create", "Edit", "Delete" ],
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
   "JunctionTable": false,

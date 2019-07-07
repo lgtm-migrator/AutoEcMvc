@@ -1,7 +1,9 @@
 {
   "Description": "A department at the university",
+  "DisplayName": "Name",
   "Name": "Department",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "HasControllers": true,
+  "ControllerMethods": [ "Index", "Details", "Create", "Edit", "Delete" ],
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
   "JunctionTable": false,

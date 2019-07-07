@@ -7,7 +7,7 @@ namespace CodeGeneration
     {
         public string Base { get; set; }
 
-        public List<string> HttpOps { get; set; }
+        public List<string> ControllerMethods { get; set; }
 
         public string Description { get; set; }
 
@@ -17,9 +17,12 @@ namespace CodeGeneration
 
         public string Name { get; set; }
 
+        public string OrderBy { get; set; }
         public string DatabaseGeneratedOption { get; set; }
 
         public string DisplayName { get; set; }
+
+        public bool HasControllers { get; set; }
 
         public string PrimaryKeyDisplayName { get; set; }
         public string PrimaryKeyName { get; set; }

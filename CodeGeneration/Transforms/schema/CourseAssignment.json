@@ -1,7 +1,6 @@
 {
   "Description": "A the assignment of a course to an instructor",
   "Name": "CourseAssignment",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
   "JunctionTable": true,
   "DatabaseGeneratedOption": "",
   "PrimaryKeyDisplayName": "",
@@ -15,6 +14,7 @@
     },
     {
       "Description": "Course to associate with an instructor",
+      "MaterializeByDefault": true,
       "Name": "Course",
       "Order": 0,
       "Target": "Course",

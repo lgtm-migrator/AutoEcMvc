@@ -3,7 +3,7 @@
   "DisplayName": "FullName",
   "IsBase": true,
   "Name": "Person",
-  "HttpOps": [ "Delete", "Get", "Patch", "Post" ],
+  "OrderBy": "LastName",
   "PrimaryKeyName": "ID",
   "Columns": [
     {

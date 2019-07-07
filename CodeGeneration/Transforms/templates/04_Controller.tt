@@ -1,6 +1,6 @@
 ﻿<#@ include file="imports.ttinclude" #><#
     var tables = BuildMethods.GetJsonFilesAsTables(Path.GetDirectoryName(Host.TemplateFile) + "\\..\\schema");
-    foreach(var table in tables.Where( t => true != t.IsBase && (t.Name == "Department" || t.Name == "Course"))) {
+    foreach(var table in tables.Where( t => true != t.IsBase && t.HasControllers)) {
         var hasPrimaryKey = true != table.JunctionTable;
         var primaryKeyName = BuildMethods.GetPrimaryKeyName(table,tables);
         var hasVersion = table.Columns.Any(c => c.Type.ToLower().Trim() == "version");#><#@ include file="warning.ttinclude" #>
@@ -19,18 +19,17 @@ namespace AutoEcMvc.Controllers
     public partial class <#=table.Name#>sController : ControllerBase
     {
         public <#=table.Name#>sController(MetadataContext context) : base(context) { }
-
+<# if(table.ControllerMethods.Any( m => m == "Index" )) { #>
         // GET: <#=table.Name#>s
         public async Task<IActionResult> Index()
         {
             var context = _context.<#=table.Name#>s
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include( c => c.<#=incl.Name#> )
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .AsNoTracking();
             return View(await context.ToListAsync());
         }
-
+<# } #>
+<# if(table.ControllerMethods.Any( m => m == "Details" )) { #>
         // GET: <#=table.Name#>s/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -39,14 +38,10 @@ namespace AutoEcMvc.Controllers
                 return NotFound();
             }
 
-            string query = "SELECT * FROM <#=table.Name#> WHERE <#=primaryKeyName#> = {0}";
             var ret = await _context.<#=table.Name#>s
-                .FromSql(query, id)
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include(c => c.<#=incl.Name#>)
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .AsNoTracking()
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
 
             if (ret == null)
             {
@@ -55,7 +50,8 @@ namespace AutoEcMvc.Controllers
 
             return View(ret);
         }
-
+<# } #>
+<# if(table.ControllerMethods.Any( m => m == "Create" )) { #>
         // GET: <#=table.Name#>s/Create
         public IActionResult Create()
         {
@@ -83,7 +79,8 @@ namespace AutoEcMvc.Controllers
             _AfterUpdate(obj);
             return View(obj);
         }
-
+<# } #>
+<# if(table.ControllerMethods.Any( m => m == "Edit" )) { #>
         // GET: <#=table.Name#>s/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -93,9 +90,7 @@ namespace AutoEcMvc.Controllers
             }
 
             var obj = await _context.<#=table.Name#>s
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include(c => c.<#=incl.Name#>)
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
 
@@ -122,9 +117,7 @@ namespace AutoEcMvc.Controllers
             }
 
             var obj = await _context.<#=table.Name#>s
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include(c => c.<#=incl.Name#>)
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
 
             if (obj == null)
@@ -192,9 +185,7 @@ namespace AutoEcMvc.Controllers
             }
 
             var obj = await _context.<#=table.Name#>s
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include(c => c.<#=incl.Name#>)
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
 
             if (await TryUpdateModelAsync<<#=table.Name#>>(obj,
@@ -217,7 +208,8 @@ namespace AutoEcMvc.Controllers
             _AfterUpdate(obj);
             return View(obj);
         }
-<# } #>
+<# } } #>
+<# if(table.ControllerMethods.Any( m => m == "Delete" )) { #>
         // GET: <#=table.Name#>s/Delete/5
         public async Task<IActionResult> Delete(int? id, bool? concurrencyError = null)
         {
@@ -227,9 +219,7 @@ namespace AutoEcMvc.Controllers
             }
 
             var obj = await _context.<#=table.Name#>s
-<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
-                .Include(c => c.<#=incl.Name#>)
-<# } #>
+<#=BuildMethods.GetIncludeColumns(table, tables)#>
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
             if (obj == null)
@@ -273,7 +263,7 @@ namespace AutoEcMvc.Controllers
                 return RedirectToAction(nameof(Delete), new { concurrencyError = true, id = obj.<#=primaryKeyName#> });
             }
         }
-
+<# } #>
         private bool <#=table.Name#>Exists(int id)
         {
             return _context.<#=table.Name#>s.Any(e => e.<#=primaryKeyName#> == id);
