@@ -23,6 +23,7 @@
     },
     {
       "Description": "Department to which this course belongs",
+      "MaterializeByDefault": true,
       "Name": "Department",
       "Order": 20,
       "Target": "Department",

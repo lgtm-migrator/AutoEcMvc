@@ -24,7 +24,8 @@ namespace AutoEcMvc.Controllers
         public async Task<IActionResult> Index()
         {
             var context = _context.Departments
-                            .Include( c => c.Administrator );
+                .Include( c => c.Administrator )
+                .AsNoTracking();
             return View(await context.ToListAsync());
         }
 
@@ -55,6 +56,7 @@ namespace AutoEcMvc.Controllers
         public IActionResult Create()
         {
             ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName");
+            _AfterUpdate();
             return View();
         }
 
@@ -72,6 +74,7 @@ namespace AutoEcMvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", obj.InstructorID);
+            _AfterUpdate(obj);
             return View(obj);
         }
 
@@ -93,6 +96,7 @@ namespace AutoEcMvc.Controllers
                 return NotFound();
             }
             ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", obj.InstructorID);
+            _AfterUpdate(obj);
             return View(obj);
         }
 
@@ -119,6 +123,7 @@ namespace AutoEcMvc.Controllers
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
             ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", obj.InstructorID);
+                _AfterUpdate(obj);
                 return View(obj);
             }
 
@@ -177,9 +182,8 @@ namespace AutoEcMvc.Controllers
             ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", obj.InstructorID);
             return View(obj);
         }
-
         // GET: Departments/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool? concurrencyError)
+        public async Task<IActionResult> Delete(int? id, bool? concurrencyError = null)
         {
             if (id == null)
             {

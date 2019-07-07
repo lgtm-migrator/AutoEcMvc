@@ -166,6 +166,10 @@ namespace CodeGeneration
             foreach (var col in thisTable.Columns.Where(c => c.Type != "relationships"))
             {
                 ret.Add(GetColumnName(col));
+                if (col.Type.StartsWith("relationship") && string.IsNullOrEmpty(col.TargetIdName))
+                {
+                    ret.Add($"{col.Target}ID");
+                }
             }
             return string.Join(",", ret);
         }
@@ -337,7 +341,7 @@ namespace CodeGeneration
                     break;
                 case "version":
                     type = "byte[]";
-                    attributes = "[TimeStamp]";
+                    attributes = "[Timestamp]";
                     break;
             }
 

@@ -18,11 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Transforms\templates\01_Enums.ignore">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>01_Enums.tt</DependentUpon>
-    </None>
     <None Update="Transforms\templates\01_Enums.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>01_Enums.ignore</LastGenOutput>
@@ -35,6 +30,11 @@
       <LastGenOutput>01_Models.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="Transforms\templates\04_Controller.ignore">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>04_Controller.tt</DependentUpon>
+    </None>
     <None Update="Transforms\templates\04_Controller.tt">
       <LastGenOutput>04_Controller.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -42,11 +42,6 @@
     <None Update="Transforms\templates\03_DbContext.tt">
       <LastGenOutput>03_DbContext.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Transforms\templates\02_Models.ignore">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>02_Models.tt</DependentUpon>
     </None>
     <None Update="Transforms\templates\02_Models.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -69,6 +64,7 @@
     <TransformOnBuild>true</TransformOnBuild>
     <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
     <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -83,13 +79,9 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del *.ignore /S" />
+    <Exec Command="del *.ignore /S &amp;&amp; exit 0" />
   </Target>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="taskkill -f /im t4vshostprocess.exe" />
-  </Target>
 
-  
 
 </Project>

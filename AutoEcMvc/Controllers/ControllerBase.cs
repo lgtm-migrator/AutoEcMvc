@@ -9,5 +9,7 @@ namespace AutoEcMvc.Controllers
         protected readonly MetadataContext _context;
 
         protected ControllerBase(MetadataContext context) => _context = context;
+
+        protected virtual void _AfterUpdate(object objToUpdate = null) { }
     }
 }
