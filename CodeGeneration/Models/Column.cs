@@ -37,6 +37,7 @@
 
         public string JsonType { get; set; }
         public int? Length { get; set; }
+        public bool MaterializeByDefault { get; set; }
         public int? MinimumLength { get; set; }
         public string Name { get; set; }
         public string NullDisplayText { get; set; }

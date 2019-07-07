@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
-using AutoEcMvc.Data;
+﻿using AutoEcMvc.Data;
 using AutoEcMvc.Models;
 using AutoEcMvc.Models.SchoolViewModels;
 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
 namespace AutoEcMvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
-        private readonly MetadataContext _context;
-
-        public HomeController(MetadataContext context)
-        {
-            _context = context;
-        }
+        public HomeController(MetadataContext context) : base(context) { }
 
         public IActionResult Index()
         {

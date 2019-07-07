@@ -10,6 +10,8 @@ namespace CodeGeneration
 {
     public static class BuildMethods
     {
+        #region Utility Methods
+
         public static string GetTabs(int tabs)
         {
             var i = 0;
@@ -21,6 +23,50 @@ namespace CodeGeneration
             }
             return pad;
         }
+
+        public static string GetPrimaryKeyName(Table thisTable, List<Table> allTables)
+        {
+            var ret = (!string.IsNullOrEmpty(thisTable.PrimaryKeyName))
+                ? thisTable.PrimaryKeyName
+                : $"{thisTable.Name}ID";
+
+            if (string.IsNullOrEmpty(thisTable.Base)) return ret;
+
+            var baseTable = allTables?.FirstOrDefault(t => t.Name == thisTable.Base);
+            ret = GetPrimaryKeyName(baseTable, null);
+            return ret;
+        }
+
+        public static string GetColumnName(Column column)
+        {
+            var ret = string.Empty;
+            if (!string.IsNullOrEmpty(column.TargetIdName))
+            {
+                ret = column.TargetIdName;
+            }
+            else
+            {
+                ret = column.Name;
+            }
+            return ret;
+        }
+
+        public static string GetDisplayName(Table thisTable, List<Table> allTables)
+        {
+            var ret = string.Empty;
+            if (!string.IsNullOrEmpty(thisTable.DisplayName))
+            {
+                return thisTable.DisplayName;
+            }
+
+            if (string.IsNullOrEmpty(thisTable.Base)) return thisTable.Columns.FirstOrDefault(c => c.Type == "string")?.Name ?? thisTable.Columns.FirstOrDefault()?.Name;
+
+            var baseTable = allTables?.FirstOrDefault(t => t.Name == thisTable.Base);
+            ret = GetDisplayName(baseTable, null);
+            return ret;
+        }
+
+        #endregion Utlity Methods
 
         #region File Methods
 
@@ -111,6 +157,61 @@ namespace CodeGeneration
         }
 
         #endregion File Methods
+
+        #region Controller Methods
+
+        public static string GetBindingColumns(Table thisTable, List<Table> allTables)
+        {
+            var ret = new List<string> { GetPrimaryKeyName(thisTable, allTables) };
+            foreach (var col in thisTable.Columns.Where(c => c.Type != "relationships"))
+            {
+                ret.Add(GetColumnName(col));
+            }
+            return string.Join(",", ret);
+        }
+
+        public static string GetCreateBinding(Column column, Table thisTable, List<Table> allTables)
+        {
+            var ret = string.Empty;
+
+            switch (column.Type)
+            {
+                case "relationship":
+                case "relationship?":
+                    var targetTable = allTables?.FirstOrDefault(t => t.Name == column.Target);
+                    ret = $"ViewData[\"{GetColumnName(column)}\"] = new SelectList(_context.{column.Target}s, \"{GetPrimaryKeyName(targetTable, allTables)}\", \"{GetDisplayName(targetTable, allTables)}\");";
+                    break;
+
+                case "relationships":
+
+                    break;
+            }
+            return $"{GetTabs(3)}{ret}";
+        }
+
+        public static string GetAfterCreateBinding(Column column, Table thisTable, List<Table> allTables)
+        {
+            var ret = string.Empty;
+
+            switch (column.Type)
+            {
+                case "relationship":
+                case "relationship?":
+                    var targetTable = allTables?.FirstOrDefault(t => t.Name == column.Target);
+                    var targetIdName = GetColumnName(column);
+                    ret = $"ViewData[\"{targetIdName}\"] = new SelectList(_context.{column.Target}s, \"{GetPrimaryKeyName(targetTable, allTables)}\", \"{GetDisplayName(thisTable, allTables)}\", obj.{targetIdName});";
+                    break;
+
+                case "relationships":
+
+                    break;
+            }
+            return $"{GetTabs(3)}{ret}";
+        }
+
+        #endregion Controller Methods
+
+        #region Model Methods
 
         public static string GetModelProperty(Column column)
         {
@@ -217,5 +318,7 @@ namespace CodeGeneration
             ret.Add(GetTabs(2) + $"public {type} {column.Name} {{ get; set; }}");
             return string.Join(Environment.NewLine, ret);
         }
+
+        #endregion Model Methods
     }
 }

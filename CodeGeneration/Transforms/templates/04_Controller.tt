@@ -1,0 +1,259 @@
+﻿<#@ include file="imports.ttinclude" #><#
+    var tables = BuildMethods.GetJsonFilesAsTables(Path.GetDirectoryName(Host.TemplateFile) + "\\..\\schema");
+    foreach(var table in tables.Where( t => true != t.IsBase && t.Name == "Department")) {
+        var hasPrimaryKey = true != table.JunctionTable;
+        var primaryKeyName = BuildMethods.GetPrimaryKeyName(table,tables);#><#@ include file="warning.ttinclude" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoEcMvc.Data;
+using AutoEcMvc.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+
+namespace AutoEcMvc.Controllers
+{
+    public partial class <#=table.Name#>sController : Controller
+    {
+        private readonly MetadataContext _context;
+
+        public <#=table.Name#>sController(MetadataContext context)
+        {
+            _context = context;
+        }
+
+        // GET: <#=table.Name#>s
+        public async Task<IActionResult> Index()
+        {
+            var context = _context.<#=table.Name#>s
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+                            .Include( c => c.<#=incl.Name#> )<# } #>;
+            return View(await context.ToListAsync());
+        }
+
+        // GET: <#=table.Name#>/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            string query = "SELECT * FROM <#=table.Name#> WHERE <#=primaryKeyName#> = {0}";
+            var ret = await _context.<#=table.Name#>s
+                .FromSql(query, id)
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+                .Include( c => c.<#=incl.Name#> )
+<# } #>
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (ret == null)
+            {
+                return NotFound();
+            }
+
+            return View(ret);
+        }
+
+        // GET: <#=table.Name#>s/Create
+        public IActionResult Create()
+        {
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+<#=BuildMethods.GetCreateBinding(incl, table, tables)#>
+<#}#>
+            return View();
+        }
+
+        // POST: <#=table.Name#>s/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("<#=BuildMethods.GetBindingColumns(table,tables)#>")] <#=table.Name#> obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(obj);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+<#=BuildMethods.GetAfterCreateBinding(incl, table, tables)#>
+<#}#>
+            return View(obj);
+        }
+
+        // GET: <#=table.Name#>s/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _context.<#=table.Name#>s
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+                .Include( c => c.<#=incl.Name#> )
+<# } #>
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.<#=primaryKeyName#> == id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+<# foreach(var incl in table.Columns.Where( c => true == c.MaterializeByDefault )) {#>
+<#=BuildMethods.GetAfterCreateBinding(incl, table, tables)#>
+<#}#>
+            return View(obj);
+        }
+
+        // POST: <#=table.Name#>s/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int? id, byte[] rowVersion)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _context.Departments.Include(i => i.Administrator).FirstOrDefaultAsync(m => m.DepartmentID == id);
+
+            if (obj == null)
+            {
+                Department deletedDepartment = new Department();
+                await TryUpdateModelAsync(deletedDepartment);
+                ModelState.AddModelError(string.Empty,
+                    "Unable to save changes. The department was deleted by another user.");
+                ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", deletedDepartment.InstructorID);
+                return View(deletedDepartment);
+            }
+
+            _context.Entry(departmentToUpdate).Property("RowVersion").OriginalValue = rowVersion;
+
+            if (await TryUpdateModelAsync<Department>(
+                departmentToUpdate,
+                "",
+                s => s.Name, s => s.StartDate, s => s.Budget, s => s.InstructorID))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    var exceptionEntry = ex.Entries.Single();
+                    var clientValues = (Department)exceptionEntry.Entity;
+                    var databaseEntry = exceptionEntry.GetDatabaseValues();
+                    if (databaseEntry == null)
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            "Unable to save changes. The department was deleted by another user.");
+                    }
+                    else
+                    {
+                        var databaseValues = (Department)databaseEntry.ToObject();
+
+                        if (databaseValues.Name != clientValues.Name)
+                        {
+                            ModelState.AddModelError("Name", $"Current value: {databaseValues.Name}");
+                        }
+                        if (databaseValues.Budget != clientValues.Budget)
+                        {
+                            ModelState.AddModelError("Budget", $"Current value: {databaseValues.Budget:c}");
+                        }
+                        if (databaseValues.StartDate != clientValues.StartDate)
+                        {
+                            ModelState.AddModelError("StartDate", $"Current value: {databaseValues.StartDate:d}");
+                        }
+                        if (databaseValues.InstructorID != clientValues.InstructorID)
+                        {
+                            Instructor databaseInstructor = await _context.Instructors.FirstOrDefaultAsync(i => i.ID == databaseValues.InstructorID);
+                            ModelState.AddModelError("InstructorID", $"Current value: {databaseInstructor?.FullName}");
+                        }
+
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                                + "was modified by another user after you got the original value. The "
+                                + "edit operation was canceled and the current values in the database "
+                                + "have been displayed. If you still want to edit this record, click "
+                                + "the Save button again. Otherwise click the Back to List hyperlink.");
+                        departmentToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        ModelState.Remove("RowVersion");
+                    }
+                }
+            }
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", departmentToUpdate.InstructorID);
+            return View(departmentToUpdate);
+        }
+
+        // GET: Departments/Delete/5
+        public async Task<IActionResult> Delete(int? id, bool? concurrencyError)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var department = await _context.Departments
+                .Include(d => d.Administrator)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.DepartmentID == id);
+            if (department == null)
+            {
+                if (concurrencyError.GetValueOrDefault())
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                return NotFound();
+            }
+
+            if (concurrencyError.GetValueOrDefault())
+            {
+                ViewData["ConcurrencyErrorMessage"] = "The record you attempted to delete "
+                    + "was modified by another user after you got the original values. "
+                    + "The delete operation was canceled and the current values in the "
+                    + "database have been displayed. If you still want to delete this "
+                    + "record, click the Delete button again. Otherwise "
+                    + "click the Back to List hyperlink.";
+            }
+
+            return View(department);
+        }
+        // POST: Departments/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Department department)
+        {
+            try
+            {
+                if (await _context.Departments.AnyAsync(m => m.DepartmentID == department.DepartmentID))
+                {
+                    _context.Departments.Remove(department);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new { concurrencyError = true, id = department.DepartmentID });
+            }
+        }
+
+        private bool <#=table.Name#>Exists(int id)
+        {
+            return _context.<#=table.Name#>s.Any(e => e.<#=primaryKeyName#> == id);
+        }
+    }
+}
+<#
+    SaveOutput(table.Name + "Controller.cs", "..//..//..//AutoEcMvc//Generated//Controllers");
+  } //foreach(var table in tables) 
+#><#@ include file="saveoutput.ttinclude" #>

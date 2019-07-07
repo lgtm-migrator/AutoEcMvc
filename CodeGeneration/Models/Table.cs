@@ -19,6 +19,8 @@ namespace CodeGeneration
 
         public string DatabaseGeneratedOption { get; set; }
 
+        public string DisplayName { get; set; }
+
         public string PrimaryKeyDisplayName { get; set; }
         public string PrimaryKeyName { get; set; }
 

@@ -41,6 +41,7 @@
     },
     {
       "Description": "Department Admin",
+      "MaterializeByDefault": true,
       "Name": "Administrator",
       "Order": 40,
       "Target": "Instructor",

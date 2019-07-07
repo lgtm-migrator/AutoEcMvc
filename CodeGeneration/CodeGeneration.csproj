@@ -14,14 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Transforms\templates\03_DbContext.ignore">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>03_DbContext.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
@@ -43,10 +35,14 @@
       <LastGenOutput>01_Models.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="Transforms\templates\03_DbContext.ignore">
+    <None Update="Transforms\templates\04_Controller.ignore">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>03_DbContext.tt</DependentUpon>
+      <DependentUpon>04_Controller.tt</DependentUpon>
+    </None>
+    <None Update="Transforms\templates\04_Controller.tt">
+      <LastGenOutput>04_Controller.ignore</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="Transforms\templates\03_DbContext.tt">
       <LastGenOutput>03_DbContext.ignore</LastGenOutput>
@@ -89,14 +85,6 @@
 
   <ItemGroup>
     <Folder Include="Transforms\enums\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Transforms\templates\03_DbContext.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>03_DbContext.tt</DependentUpon>
-    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
