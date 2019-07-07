@@ -4,7 +4,7 @@
         var isDerivedClass = !string.IsNullOrWhiteSpace(table.Base);
         var classContext = (true == table.IsBase) ? "abstract " : "";
         var hasPrimaryKey = !isDerivedClass && true != table.JunctionTable;
-        var primaryKeyName = BuildMethods.GetPrimaryKeyName(table);#><#@ include file="warning.ttinclude" #>
+        var primaryKeyName = BuildMethods.GetPrimaryKeyName(table,tables);#><#@ include file="warning.ttinclude" #>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

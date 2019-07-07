@@ -35,11 +35,6 @@
       <LastGenOutput>01_Models.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="Transforms\templates\04_Controller.ignore">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>04_Controller.tt</DependentUpon>
-    </None>
     <None Update="Transforms\templates\04_Controller.tt">
       <LastGenOutput>04_Controller.ignore</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -89,6 +84,10 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="del *.ignore /S" />
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="taskkill -f /im t4vshostprocess.exe" />
   </Target>
 
   

@@ -36,8 +36,7 @@
       "Description": "Version number for this record",
       "Name": "RowVersion",
       "Order": 30,
-      "Timestamp": true,
-      "Type": "byte[]"
+      "Type": "version"
     },
     {
       "Description": "Department Admin",

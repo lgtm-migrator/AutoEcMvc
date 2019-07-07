@@ -170,6 +170,50 @@ namespace CodeGeneration
             return string.Join(",", ret);
         }
 
+        public static string GetAssignColumns(Table thisTable, List<Table> allTables)
+        {
+            var ret = new List<string> { };
+            foreach (var col in thisTable.Columns.Where(c => c.Type != "relationships" && c.Type != "version"))
+            {
+                ret.Add($"s => s.{GetColumnName(col)}");
+            }
+            return string.Join(",", ret);
+        }
+
+        public static string GetValidateColumns(Table thisTable, List<Table> allTables)
+        {
+            var ret = new List<string> { };
+            foreach (var column in thisTable.Columns.Where(c => c.Type != "relationships" && c.Type != "version"))
+            {
+                var name = GetColumnName(column);
+                ret.Add($"{GetTabs(6)}if (databaseValues.{name} != clientValues.{name})");
+                ret.Add($"{GetTabs(6)}{{");
+                if (column.Type.StartsWith("relationship"))
+                {
+                    var targetTable = allTables?.FirstOrDefault(t => t.Name == column.Target);
+                    ret.Add($"{GetTabs(7)}var en = await _context.{column.Target}s.FirstOrDefaultAsync(i => i.{GetPrimaryKeyName(targetTable, allTables)} == databaseValues.{GetColumnName(column)});");
+                    ret.Add($"{GetTabs(7)}ModelState.AddModelError(\"{GetColumnName(column)}\", $\"Current value: {{ en.{GetDisplayName(targetTable, allTables)}}}\");");
+                }
+                else
+                {
+                    var formatter = string.Empty;
+                    if (column.Type.StartsWith("decimal"))
+                    {
+                        formatter = ":c";
+                    }
+
+                    if (column.Type.StartsWith("DateTime"))
+                    {
+                        formatter = ":d";
+                    }
+                    ret.Add($"{GetTabs(7)}ModelState.AddModelError(\"{GetColumnName(column)}\", $\"Current value: {{ databaseValues.{name}{formatter}}}\");");
+                }
+
+                ret.Add($"{GetTabs(6)}}}");
+            }
+            return string.Join(Environment.NewLine, ret);
+        }
+
         public static string GetCreateBinding(Column column, Table thisTable, List<Table> allTables)
         {
             var ret = string.Empty;
@@ -189,24 +233,30 @@ namespace CodeGeneration
             return $"{GetTabs(3)}{ret}";
         }
 
-        public static string GetAfterCreateBinding(Column column, Table thisTable, List<Table> allTables)
+        public static string GetAfterUpdateBinding(Table thisTable, List<Table> allTables)
         {
-            var ret = string.Empty;
-
-            switch (column.Type)
+            var ret = new List<string>();
+            foreach (var column in thisTable.Columns.Where(c => true == c.MaterializeByDefault))
             {
-                case "relationship":
-                case "relationship?":
-                    var targetTable = allTables?.FirstOrDefault(t => t.Name == column.Target);
-                    var targetIdName = GetColumnName(column);
-                    ret = $"ViewData[\"{targetIdName}\"] = new SelectList(_context.{column.Target}s, \"{GetPrimaryKeyName(targetTable, allTables)}\", \"{GetDisplayName(thisTable, allTables)}\", obj.{targetIdName});";
-                    break;
+                var viewData = string.Empty;
 
-                case "relationships":
+                switch (column.Type)
+                {
+                    case "relationship":
+                    case "relationship?":
+                        var targetTable = allTables?.FirstOrDefault(t => t.Name == column.Target);
+                        var targetIdName = GetColumnName(column);
+                        viewData =
+                            $"ViewData[\"{targetIdName}\"] = new SelectList(_context.{column.Target}s, \"{GetPrimaryKeyName(targetTable, allTables)}\", \"{GetDisplayName(targetTable, allTables)}\", obj.{targetIdName});";
+                        break;
 
-                    break;
+                    case "relationships":
+
+                        break;
+                }
+                ret.Add($"{GetTabs(3)}{viewData}");
             }
-            return $"{GetTabs(3)}{ret}";
+            return string.Join(Environment.NewLine, ret);
         }
 
         #endregion Controller Methods
@@ -284,6 +334,10 @@ namespace CodeGeneration
 
                 case "relationships":
                     type = $"ICollection<{column.Target}>";
+                    break;
+                case "version":
+                    type = "byte[]";
+                    attributes = "[TimeStamp]";
                     break;
             }
 
