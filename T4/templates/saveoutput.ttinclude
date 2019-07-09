@@ -10,20 +10,20 @@
 
   void SaveOutput(JObject root, string outputFileName, string path)
   {
-     SaveOutput(root, outputFileName, path, true);
+     SaveOutput(root.ToString(), outputFileName, path, true);
   }
 
-  void SaveOutput(object root, string outputFileName, string path, bool createIfMissing)
+  void SaveOutput(string root, string outputFileName, string path, bool createIfMissing)
   {
      // Write to destination folder
+     path = "..//..//AutoEcMvc//Generated//" + path;
      string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), path);
      if(!Directory.Exists(templateDirectory)) {
         Directory.CreateDirectory(templateDirectory);
      }
      string outputFilePath = Path.Combine(templateDirectory, outputFileName);
-     
-     File.WriteAllText(outputFilePath, root.ToString()); 
+     File.WriteAllText(outputFilePath, root); 
 
-     // Flush generation
+          // Flush generation
      this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
   } #>

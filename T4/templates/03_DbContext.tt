@@ -23,5 +23,5 @@ namespace AutoEcMvc.Data
     }
 }
 <#
-    SaveOutput("MetadataContext.cs", "..//..//..//AutoEcMvc//Generated//Data");
+    SaveOutput("MetadataContext.cs", "Data");
 #><#@ include file="saveoutput.ttinclude" #>

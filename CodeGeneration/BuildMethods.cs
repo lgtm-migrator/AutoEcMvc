@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -91,7 +90,6 @@ namespace CodeGeneration
                 {
                     try
                     {
-                        Trace.WriteLine("Starting parse of " + f.Name);
                         using (var reader = new StreamReader(f.FullName, true))
                         {
                             var table = JsonConvert.DeserializeObject<Table>(reader.ReadToEnd(), settings);
@@ -99,16 +97,10 @@ namespace CodeGeneration
                             _tables.Add(table);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.Message);
-                    }
+                    catch { }
                 }
             }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.Message);
-            }
+            catch { }
             return _tables;
         }
 
@@ -133,7 +125,6 @@ namespace CodeGeneration
                 {
                     try
                     {
-                        Trace.WriteLine("Starting parse of " + f.Name);
                         using (var reader = new StreamReader(f.FullName, true))
                         {
                             _enums[f.Name.Replace(".json", "")] =
@@ -142,16 +133,10 @@ namespace CodeGeneration
                             reader.Close();
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine(ex.Message);
-                    }
+                    catch { }
                 }
             }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.Message);
-            }
+            catch { }
 
             return _enums;
         }

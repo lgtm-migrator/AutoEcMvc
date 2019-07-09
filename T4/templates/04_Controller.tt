@@ -271,6 +271,6 @@ namespace AutoEcMvc.Controllers
     }
 }
 <#
-    SaveOutput(table.Name + "sController.cs", "..//..//..//AutoEcMvc//Generated//Controllers");
+    SaveOutput(table.Name + "sController.cs", "Controllers");
   } //foreach(var table in tables) 
 #><#@ include file="saveoutput.ttinclude" #>

@@ -14,39 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <Compile Remove="Transforms\**" />
+    <EmbeddedResource Remove="Transforms\**" />
+    <None Remove="Transforms\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Transforms\templates\01_Enums.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>01_Enums.ignore</LastGenOutput>
-    </None>
-    <None Update="Transforms\templates\01_Models copy.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>01_Models copy.ignore</LastGenOutput>
-    </None>
-    <None Update="Transforms\templates\01_Models.tt">
-      <LastGenOutput>01_Models.ignore</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Transforms\templates\04_Controller.ignore">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>04_Controller.tt</DependentUpon>
-    </None>
-    <None Update="Transforms\templates\04_Controller.tt">
-      <LastGenOutput>04_Controller.ignore</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Transforms\templates\03_DbContext.tt">
-      <LastGenOutput>03_DbContext.ignore</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Transforms\templates\02_Models.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>02_Models.ignore</LastGenOutput>
-    </None>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -74,12 +48,8 @@
     </T4ParameterValues>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Transforms\enums\" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del *.ignore /S &amp;&amp; exit 0" />
+    <Exec Command="del *.ignore /S" />
   </Target>
 
 
