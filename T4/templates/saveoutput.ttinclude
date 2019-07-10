@@ -24,6 +24,8 @@
      string outputFilePath = Path.Combine(templateDirectory, outputFileName);
      File.WriteAllText(outputFilePath, root); 
 
-          // Flush generation
+     // Flush generation
+     // This is critical as we're using the same template to generate multiple files
+     // We need to clear the current template instance before reprocessing on a new file
      this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
   } #>
