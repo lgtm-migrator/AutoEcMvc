@@ -48,10 +48,6 @@
     </T4ParameterValues>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del *.ignore /S" />
-  </Target>
-
 
 
 </Project>

@@ -12,11 +12,13 @@ namespace AutoEcMvc.Data
         {
         }
 <# foreach(var table in tables) {#>
-        public DbSet<<#=table.Name#>> <#=table.Name#>s { get; set; }<#}#>
+        public DbSet<<#=table.Name#>> <#=table.Name#>s { get; set; }
+<#}#>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 <# foreach(var table in tables) {#>
-            modelBuilder.Entity<<#=table.Name#>>().ToTable(nameof(<#=table.Name#>));<#}#>
+            modelBuilder.Entity<<#=table.Name#>>().ToTable(nameof(<#=table.Name#>));
+<#}#>
 
             _OnModelCreating(modelBuilder);
         }

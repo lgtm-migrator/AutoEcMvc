@@ -56,7 +56,7 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>del *.ignore /S</PostBuildEvent>
+    <PostBuildEvent>del ..\*.ignore /S</PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
@@ -85,8 +85,6 @@
   <ItemGroup>
     <None Include="**\*.ttinclude" />
     <None Include="enums\Grade.json" />
-    <None Include="obj\project.assets.json" />
-    <None Include="obj\T4.csproj.nuget.dgspec.json" />
     <None Include="schema\Course.json" />
     <None Include="schema\CourseAssignment.json" />
     <None Include="schema\Department.json" />

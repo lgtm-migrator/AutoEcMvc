@@ -13,7 +13,8 @@ namespace AutoEcMvc.Enums
     public enum <#= className #>
     {
 <# foreach(var valueKvp in enm) { #> 
-        <#=valueKvp.Key#> = <#=valueKvp.Value#>, <# } #>
+        <#=valueKvp.Key#> = <#=valueKvp.Value#>, 
+<# } #>
     }
 }
 <# SaveOutput(className + ".cs", "Enums");

@@ -15,7 +15,6 @@ namespace AutoEcMvc.Data
         public MetadataContext(DbContextOptions<MetadataContext> options) : base(options)
         {
         }
-
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -23,9 +22,9 @@ namespace AutoEcMvc.Data
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<Person> Persons { get; set; }
-        public DbSet<Student> Students { get; set; }        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Student> Students { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Course>().ToTable(nameof(Course));
             modelBuilder.Entity<CourseAssignment>().ToTable(nameof(CourseAssignment));
             modelBuilder.Entity<Department>().ToTable(nameof(Department));
@@ -34,6 +33,7 @@ namespace AutoEcMvc.Data
             modelBuilder.Entity<OfficeAssignment>().ToTable(nameof(OfficeAssignment));
             modelBuilder.Entity<Person>().ToTable(nameof(Person));
             modelBuilder.Entity<Student>().ToTable(nameof(Student));
+
             _OnModelCreating(modelBuilder);
         }
     }
