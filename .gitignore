@@ -40,3 +40,4 @@ Thumbs.db
 *.ignore
 AutoEcMvc/Properties/PublishProfiles/
 codealike.json
+node_modules
